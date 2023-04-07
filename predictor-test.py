@@ -227,6 +227,16 @@ image2_boxes = torch.tensor([
     [580, 170, 640, 350],
 ], device=sam.device)
 
+image3 = cv2.imread('assets/dataset-1/sa_223751.jpg')
+image3 = cv2.cvtColor(image3, cv2.COLOR_BGR2RGB)
+image3_boxes = torch.tensor([
+    [450, 170, 520, 350],
+    [350, 190, 450, 350],
+    [500, 170, 580, 350],
+    [580, 170, 640, 350],
+], device=sam.device)
+
+
 from segment_anything.utils.transforms import ResizeLongestSide
 resize_transform = ResizeLongestSide(sam.image_encoder.img_size)
 
@@ -245,6 +255,12 @@ batched_input = [
          'image': prepare_image(image2, resize_transform, sam),
          'boxes': resize_transform.apply_boxes_torch(image2_boxes, image2.shape[:2]),
          'original_size': image2.shape[:2]
+     },
+     {
+         'image': prepare_image(image3, resize_transform, sam),
+         'boxes': resize_transform.apply_boxes_torch(image3_boxes, image3.shape[:2]),
+         'original_size': image3.shape[:2]
+    
      }
 ]
 
@@ -267,6 +283,13 @@ for mask in batched_output[1]['masks']:
 for box in image2_boxes:
     show_box(box.cpu().numpy(), ax[1])
 ax[1].axis('off')
+
+# ax[2].imshow(image3)
+# for mask in batched_output[2]['masks']:
+#     show_mask(mask.cpu().numpy(), ax[2], random_color=True)
+# for box in image3_boxes:
+#     show_box(box.cpu().numpy(), ax[2])
+# ax[2].axis('off')
 
 plt.tight_layout()
 plt.show()
