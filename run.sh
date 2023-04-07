@@ -1,4 +1,1 @@
-from segment_anything import build_sam, SamPredictor 
-predictor = SamPredictor(build_sam(checkpoint="$1"))
-predictor.set_image($2)
-masks, _, _ = predictor.predict($3)
+python scripts/amg.py --checkpoint <path/to/sam/checkpoint> --input $PWD/assets/dataset-1/ --output $PWD/out>
